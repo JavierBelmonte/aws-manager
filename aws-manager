@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# AWS Manager - macOS Script
+# Ejecuta el gestor de credenciales AWS desde cualquier ubicación
+
+# Obtener la ruta real del script (siguiendo enlaces simbólicos)
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || realpath "${BASH_SOURCE[0]}" 2>/dev/null || echo "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
+# Activar el entorno virtual si existe
+if [ -f "$SCRIPT_DIR/venv/bin/python" ]; then
+    PYTHON_CMD="$SCRIPT_DIR/venv/bin/python"
+elif [ -f "/opt/homebrew/bin/python3.14" ]; then
+    PYTHON_CMD="/opt/homebrew/bin/python3.14"
+elif [ -f "/opt/homebrew/bin/python3.13" ]; then
+    PYTHON_CMD="/opt/homebrew/bin/python3.13"
+else
+    PYTHON_CMD="python3"
+fi
+
+# Ejecutar el script Python con todos los argumentos pasados
+"$PYTHON_CMD" "$SCRIPT_DIR/aws_tui.py" "$@"
